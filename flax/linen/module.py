@@ -1037,7 +1037,6 @@ class Module(ModuleBase):
     cls._customized_dataclass_transform(kw_only)
     # We wrap user-defined methods including setup and __call__ to enforce
     # a number of different checks and to provide clear error messages.
-    cls._verify_single_or_no_compact()
     cls._find_compact_name_scope_methods()
     cls._wrap_module_attributes()
     # Set empty class defaults.
@@ -1117,20 +1116,6 @@ class Module(ModuleBase):
     cls.__hash__ = _wrap_hash(cls.__hash__)  # type: ignore[method-assign]
 
   @classmethod
-  def _verify_single_or_no_compact(cls):
-    """Statically verifies that at most a single method is labelled compact."""
-    methods = [m[0] for m in inspect.getmembers(cls, predicate=callable)]
-    n_compact_fns = len(
-      [
-        method_name
-        for method_name in methods
-        if hasattr(getattr(cls, method_name), 'compact')
-      ]
-    )
-    if n_compact_fns > 1:
-      raise errors.MultipleMethodsCompactError()
-
-  @classmethod
   def _find_compact_name_scope_methods(cls):
     """Finds all compact_name_scope methods in the class."""
     methods = [m[0] for m in inspect.getmembers(cls, predicate=callable)]
@@ -1208,6 +1193,7 @@ class Module(ModuleBase):
         raise errors.CallCompactUnboundModuleError()
       is_recurrent = self._state.in_compact_method
       self._state.in_compact_method = True
+      self._state.autoname_cursor = {}
     _context.module_stack.append(self)
     try:
       # get call info
