@@ -31,7 +31,7 @@
 from absl.testing import absltest
 from absl.testing import parameterized
 from flax import nnx
-from flax.nnx.examples.gemma import layers
+from flax.nnx.examples.gemma import layers  # type: ignore[import-error]
 import jax.numpy as jnp
 import numpy as np
 

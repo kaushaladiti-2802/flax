@@ -34,7 +34,7 @@ from absl.testing import absltest
 from absl.testing import parameterized
 from flax import nnx
 import flax.linen as nn
-from flax.nnx.examples.gemma import helpers
+from flax.nnx.examples.gemma import helpers  # type: ignore[import-error]
 import jax
 import jax.numpy as jnp
 import numpy as np
