@@ -376,3 +376,11 @@ model = nnx.merge(graphdef, params, counts)
 # update with multiple States
 nnx.update(model, params, counts)
 ```
+
+## Using Modules as Pytrees
+
+Even though `nnx.split` and `nnx.merge` can be used to interact with any JAX
+API, they are not always the most convenient way to do so as they introduce
+some syntactic overhead. To make this easier, NNX provides a way to register
+`Module`s and other `Object`-derived types as Pytrees via the `unsafe_pytree`
+class argument.
